@@ -1,0 +1,16 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended", "next", "next/core-web-vitals", "plugin:prettier/recommended"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-unused-vars": "warn",
+    "no-console": "warn",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off"
+  }
+}
