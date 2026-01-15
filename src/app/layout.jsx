@@ -1,3 +1,4 @@
+import Navbar from '@/components/Navbar';
 import './globals.css';
 export const metadata = {
   title: 'Create Next App',
@@ -7,7 +8,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body cz-shortcut-listen="true" className={`  antialiased`}>{children}</body>
+      <body cz-shortcut-listen="true" className={` bg-black text-white antialiased`}>
+        <Navbar/>
+        {children}</body>
     </html>
   );
 }
