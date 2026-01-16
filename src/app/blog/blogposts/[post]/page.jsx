@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import React from 'react';
 
 const posts = [
@@ -46,36 +45,21 @@ const posts = [
   },
 ];
 
-function BlogPosts() {
+export default function page({ params }) {
+  if (!params) throw console.error('params not found');
+
+  console.log(Number(params.post));
+
   return (
-    <section className="w-full h-['90vh'] p-0 pt-30  py-16">
-      <div className="max-w-6xl mx-auto px-6">
-        <h2 className="text-3xl font-bold text-zinc-100 mb-10">Latest Blog Posts</h2>
-
-        <div className="flex flex-col gap-6">
-          {posts.map((post) => (
-            <div
-              key={post.id}
-              className="rounded-xl border border-zinc-900 p-6 hover:shadow-md transition"
-            >
-              <h3 className="text-3xl font-semibold text-zinc-50 mb-2">{post.title}</h3>
-
-              <p className="text-zinc-600 text-['15px']  mb-6">{post.description}</p>
-
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500" />
-
-                <Link href={`/blog/blogposts/${post.id}`}>
-                  <p className="text-sm font-medium text-zinc-900">{post.author}</p>
-                  <p className="text-xs text-zinc-500">view</p>
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+    <div className="min-h-screen bg-black text-white p-8 flex flex-col max-w-3xl mx-auto">
+      <div className="flex gap-4">
+        <button className="px-4 py-2 bg-white text-black rounded hover:bg-gray-300 transition">
+          Back
+        </button>
+        <button className="px-4 py-2 border border-white rounded hover:bg-white hover:text-black transition">
+          Edit
+        </button>
       </div>
-    </section>
+    </div>
   );
 }
-
-export default BlogPosts;

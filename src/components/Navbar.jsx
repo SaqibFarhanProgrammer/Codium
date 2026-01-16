@@ -7,7 +7,7 @@ import { CiSearch } from 'react-icons/ci';
 
 function Navbar() {
   return (
-    <nav className="w-full h-14  py-4 b fixed top 0">
+    <nav className="w-full h-14  py-4 b fixed bg-black top 0">
       <div className=" mx-auto h-full flex items-center justify-between px-5">
         {/* Left Section */}
         <div className="flex items-center gap-2">
@@ -19,7 +19,10 @@ function Navbar() {
         </div>
 
         <div className="search relative  w-180">
-          <Input className="bg-zinc-80  border-none rounded-full w-full pl-10 text-" defaultValue="Search" />
+          <Input
+            className="bg-zinc-80  border-none rounded-full w-full pl-10 text-"
+            defaultValue="Search"
+          />
           <CiSearch className="absolute top-1 text-3xl left-1" />
         </div>
         {/* Right Section */}
