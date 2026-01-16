@@ -4,10 +4,11 @@ import Image from 'next/image';
 import MyButton from './MyButton';
 import { Input } from './ui/input';
 import { CiSearch } from 'react-icons/ci';
+import { islogin } from '../../appConfig';
 
 function Navbar() {
   return (
-    <nav className="w-full h-14  py-4 b fixed bg-black top 0">
+    <nav className="w-full h-14 z-10  py-4 b fixed bg-black top 0">
       <div className=" mx-auto h-full flex items-center justify-between px-5">
         {/* Left Section */}
         <div className="flex items-center gap-2">
@@ -28,8 +29,14 @@ function Navbar() {
         {/* Right Section */}
         <div className="flex items-center gap-4">
           <div className="mr-4 gap-3 flex">
-            <MyButton title="Login" exttraClass=" bg-transparent t hover:text-white" />
-            <MyButton title="SignUp" exttraClass="  " />
+            {islogin ? (
+              <>
+                <MyButton title="Login" exttraClass=" bg-transparent t hover:text-white" />
+                <MyButton title="SignUp" exttraClass="  " />
+              </>
+            ) : (
+              <MyButton title="write" />
+            )}
           </div>
           <a
             href="https://github.com"
