@@ -1,7 +1,12 @@
+'use client';
 import Link from 'next/link';
 import Profile_picture from './Profile_picture';
+import { useContext } from 'react';
+import Context from '@/context/context';
 
 export default function Register() {
+  const { settoggleAuth } = useContext(Context);
+
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
       <div className="w-full max-w-md rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-8">
@@ -35,9 +40,9 @@ export default function Register() {
 
         <p className="text-sm text-zinc-500 mt-6">
           Already have an account?{' '}
-          <Link href="/login" className="text-white">
+          <button onClick={() => settoggleAuth('login')} className="text-white">
             Login
-          </Link>
+          </button>
         </p>
       </div>
     </div>

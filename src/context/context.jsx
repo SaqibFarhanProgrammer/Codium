@@ -5,9 +5,24 @@ export const Context = createContext();
 
 export const AppProvider = ({ children }) => {
   const [isnavbar, setisnavbar] = useState(false);
+  const [toggleAuth, settoggleAuth] = useState('register');
   const name = 'asd';
+  
+  const value = {
+    toggleAuth,
+    settoggleAuth,
+  };
 
-  return <Context.Provider value={{ name }}>{children}</Context.Provider>;
+  return (
+    <Context.Provider
+      value={{
+        toggleAuth,
+        settoggleAuth,
+      }}
+    >
+      {children}
+    </Context.Provider>
+  );
 };
 
-export const useAppContext = () => useContext(Context);
+export default Context;

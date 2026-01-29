@@ -1,14 +1,16 @@
+'use client';
+
 import Login from '@/components/auth/Login';
 import Register from '@/components/auth/Register';
-import React from 'react';
+import { Context, useAppContext } from '@/context/context';
+import React, { useContext } from 'react';
 
-function page() {
-  return (
-    <div>
-      <Login />
-      <Register />
-    </div>
-  );
+function Page() {
+  const { toggleAuth, settoggleAuth } = useContext(Context);
+
+  console.log(toggleAuth);
+
+  return <div>{toggleAuth === 'register' ? <Register /> : <Login />}</div>;
 }
 
-export default page;
+export default Page;
