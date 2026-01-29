@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar';
 import './globals.css';
 import Providers from './Providers';
+import Footer from '@/components/Footer';
 
 
 
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
           <div className="left w-['20vw'] "></div>
           <div className="right w-full mt-4 ">
             <Providers>{children}</Providers>
+        <Footer/>
           </div>
         </div>
       </body>
