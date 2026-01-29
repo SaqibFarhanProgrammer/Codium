@@ -1,8 +1,15 @@
 import React from 'react';
 import HeroImage from '../../public/image.png'; // replace with your large image
 import Link from 'next/link';
+import { islogin } from '../../appConfig';
+import { redirect } from 'next/navigation';
 
 export default function HomePage() {
+
+if(islogin){
+  redirect('/auth')
+}
+
   return (
     <div className="w-full min-h-screen bg-black text-white">
       {/* Hero Section */}

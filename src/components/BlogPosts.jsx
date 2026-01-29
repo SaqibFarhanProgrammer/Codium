@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
+import { islogin } from "../../appConfig";
 
 const posts = [
   {
@@ -47,6 +49,10 @@ const posts = [
 ];
 
 function BlogPosts() {
+  if(islogin){
+  redirect('/auth')
+}
+
   return (
     <section className="w-full py-20">
       <div className="max-w-6xl mx-auto px-6">
