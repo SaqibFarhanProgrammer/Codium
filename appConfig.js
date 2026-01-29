@@ -1,3 +1,3 @@
-const islogin  = false
+const islogin = false;
 
-export {islogin}
+export { islogin };

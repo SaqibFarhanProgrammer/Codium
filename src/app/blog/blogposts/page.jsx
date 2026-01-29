@@ -1,12 +1,13 @@
-import BlogPosts from '@/components/BlogPosts'
-import React from 'react'
+import BlogPosts from '@/components/BlogPosts';
+import React from 'react';
 
-function page() {
+function Page() {
+
   return (
     <div>
-        <BlogPosts/>
+      <BlogPosts />
     </div>
-  )
+  );
 }
 
-export default page
+export default Page;

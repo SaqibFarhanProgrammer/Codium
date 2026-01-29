@@ -5,8 +5,8 @@ import { islogin } from '../../appConfig';
 import { redirect } from 'next/navigation';
 
 function page() {
-    if (!islogin) {
-    redirect('/blog');
+  if (!islogin) {
+    redirect('/blog/blogposts');
   }
 
   return (

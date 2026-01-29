@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 
 function Sidebar() {
-  return ( 
-    <aside className="w-64 fixed min-h-screen bg-black text-white p-6 border-r border-gray-800">
+  return (
+    <aside className="w-64  min-h-screen bg-black text-white p-6 border-r border-gray-800">
       <h2 className="text-xl font-semibold mb-8">Dashboard</h2>
 
       <nav className="flex flex-col gap-4">
@@ -19,7 +19,7 @@ function Sidebar() {
         </button>
       </nav>
     </aside>
-  )
+  );
 }
 
-export default Sidebar
+export default Sidebar;

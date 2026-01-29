@@ -36,7 +36,7 @@ function Page() {
   }
 
   return (
-    <div className="min-h-screen relative z-1   bg-zinc-500 text-white flex items-center justify-center px-6">
+    <div className="min-h-screen relative z-1    text-white flex items-center justify-center px-6">
       <Link href="/blog/blogposts">
         <Button className="absolute top-15 left-2">back</Button>
       </Link>

@@ -1,11 +1,9 @@
 import React from 'react';
 import { Button } from './ui/button';
-function MyButton({ title, exttraClass ,color }) {
+function MyButton({ title, exttraClass, color }) {
   return (
     <>
-      <Button className={` ${color} font-["medium"]  rounded-full  ${exttraClass}`}>
-        {title}
-      </Button>
+      <Button className={` ${color} font-["medium"]  rounded-full  ${exttraClass}`}>{title}</Button>
     </>
   );
 }

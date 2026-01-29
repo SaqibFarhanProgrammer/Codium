@@ -1,9 +1,7 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-
 @custom-variant dark (&:is(.dark *));
-
 
 @font-face {
   font-family: 'medium';
@@ -28,13 +26,11 @@
 
 /* Inter ExtraLight */
 
-
 /* Root CSS Variables */
 :root {
   --font-sans: 'Inter', sans-serif;
   --font-heading: 'Helvetica', sans-serif;
 }
-
 
 @theme inline {
   --color-background: var(--background);
@@ -164,7 +160,6 @@
   }
 }
 
-
-.btn-bg{
+.btn-bg {
   background-color: #f7f3f3;
 }

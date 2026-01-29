@@ -6,7 +6,7 @@ function HomePage() {
       <div className="max-w-7xl mx-auto w-full px-6 grid grid-cols-1 md:grid-cols-2 gap-10">
         <div className="flex flex-col justify-center gap-6">
           <h1 className="text-4xl font-['bold'] md:text-5xl font-bold text-zinc-100 leading-tight">
-            Ideas, Stories & <br /> Practical Knowledge                         
+            Ideas, Stories & <br /> Practical Knowledge
           </h1>
 
           <p className="text-zinc-100 font-['medium'] max-w-md">
