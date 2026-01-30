@@ -3,11 +3,10 @@ import Navbar from '@/components/Navbar';
 import React from 'react';
 import { islogin } from '../../appConfig';
 import { redirect } from 'next/navigation';
+import connectDB from '@/lib/db';
 
 function page() {
-  if (!islogin) {
-    redirect('/blog/blogposts');
-  }
+
 
   return (
     <div className="">

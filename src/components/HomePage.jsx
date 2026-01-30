@@ -5,10 +5,9 @@ import { islogin } from '../../appConfig';
 import { redirect } from 'next/navigation';
 
 export default function HomePage() {
-
-if(islogin){
-  redirect('/auth')
-}
+  if (islogin) {
+    redirect('/auth');
+  }
 
   return (
     <div className="w-full min-h-screen bg-black text-white">
