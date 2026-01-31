@@ -1,18 +1,14 @@
-const { Mongoose, default: mongoose } = require('mongoose');
+import mongoose from 'mongoose';
+
+const MONGODB_URI = `${process.env.MONGODB_CONNECT_URL}/${process.env.DB_NAME}`;
 
 async function connectdb() {
   try {
-    const connet = await mongoose.connect(`${process.env.MONGODB_CONNECT_URL}/${process.env.DB_NAME}`);
-    connet.connection.on('connected', () => {
-      console.log('Mongoose connected to DB');
-    });
-
-    connet.connection.on('error', (err) => {
-      console.log('Mongoose connection error:', err);
-      process.emit();
-    });
+    await mongoose.connect(MONGODB_URI);
+    console.log('Mongoose connected to DB');
   } catch (error) {
-    console.log('Error connecting to MongoDB:', error);
+    console.error('MongoDB connection failed:', error);
+    throw error;
   }
 }
 
