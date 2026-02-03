@@ -1,11 +1,36 @@
 'use client';
-import Link from 'next/link';
-import Profile_picture from '@/components/auth-component/Profile_picture';
-import { useContext } from 'react';
-import Context from '@/context/context';
+import { useForm } from 'react-hook-form';
+
+import axios from 'axios';
+import { useState } from 'react';
 
 export default function Register() {
-  const { settoggleAuth } = useContext(Context);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const [isSubmit, setisSubmit] = useState("");
+
+  const RegisterUser = async (data) => {
+    const { username, email, password } = data;
+
+    setisSubmit("loading");
+    const response = await axios.post('/api/users/signup', {
+      username: username,
+      email: email,
+      password: password,
+    });
+
+    if( response.status === 200){
+      setisSubmit("user created")
+    }
+
+
+    setisSubmit("loading false");
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
@@ -13,34 +38,64 @@ export default function Register() {
         <h1 className="text-3xl font-semibold mb-2">Create account</h1>
         <p className="text-sm text-zinc-400 mb-8">Start writing and sharing ideas</p>
 
-        <form className="space-y-6">
-          <Profile_picture />
-          <input
-            type="text"
-            placeholder="Full name"
-            className="w-full bg-transparent border-b border-white/20 py-3 outline-none placeholder:text-zinc-500"
-          />
+        <form className="space-y-6" onSubmit={handleSubmit(RegisterUser)}>
+          <div className="mb-5">
+            <input
+              {...register('username', { required: 'Username is required' })}
+              type="text"
+              placeholder="Username"
+              className={`w-full bg-transparent border-b py-3 outline-none placeholder:text-zinc-500 ${
+                errors.username ? 'border-red-400' : 'border-white/20'
+              }`}
+            />
+            {errors.username && (
+              <p className="text-red-400 text-sm mt-1">{errors.username.message}</p>
+            )}
+          </div>
 
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full bg-transparent border-b border-white/20 py-3 outline-none placeholder:text-zinc-500"
-          />
+          <div className="mb-5">
+            <input
+              {...register('email', {
+                required: 'Email is required',
+                pattern: { value: /^\S+@\S+$/i, message: 'Invalid email address' },
+              })}
+              type="email"
+              placeholder="Email"
+              className={`w-full bg-transparent border-b py-3 outline-none placeholder:text-zinc-500 ${
+                errors.email ? 'border-red-400' : 'border-white/20'
+              }`}
+            />
+            {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>}
+          </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full bg-transparent border-b border-white/20 py-3 outline-none placeholder:text-zinc-500"
-          />
+          <div className="mb-5">
+            <input
+              {...register('password', {
+                required: 'Password is required',
+                minLength: { value: 6, message: 'Minimum 6 characters' },
+              })}
+              type="password"
+              placeholder="Password"
+              className={`w-full bg-transparent border-b py-3 outline-none placeholder:text-zinc-500 ${
+                errors.password ? 'border-red-400' : 'border-white/20'
+              }`}
+            />
+            {errors.password && (
+              <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>
+            )}
+          </div>
 
-          <button className="w-full py-3 rounded-full bg-white text-black font-medium">
-            Register
+          <button
+            type="submit"
+            className="w-full py-3 rounded-full bg-white text-black font-medium"
+          >
+            {isSubmit === 'loading' ? 'loading' : 'signup'}
           </button>
         </form>
 
         <p className="text-sm text-zinc-500 mt-6">
           Already have an account?{' '}
-          <button onClick={() => settoggleAuth('login')} className="text-white">
+          <button type="submit" className="text-white">
             Login
           </button>
         </p>

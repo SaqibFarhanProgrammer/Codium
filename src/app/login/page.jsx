@@ -2,6 +2,8 @@ import Context from '@/context/context';
 import Link from 'next/link';
 
 export default function Login() {
+
+  
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
       <div className="w-full max-w-md rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-8">
@@ -27,10 +29,7 @@ export default function Login() {
         </form>
 
         <p className="text-sm text-zinc-500 mt-6">
-          Don’t have an account?{' '}
-          <button  className="text-white">
-            Register
-          </button>
+          Don’t have an account? <button className="text-white">Register</button>
         </p>
       </div>
     </div>
