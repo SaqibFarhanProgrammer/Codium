@@ -1,13 +1,7 @@
-import connectDB from '@/lib/db';
+import connectDB from '@/db/connectdb'
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import sendMail from '@/helpers/mailer.helper';
 import { User } from '@/models/user.models';
-
-
-await connectDB();
-console.log("connect MONGODB");
-
 
 export async function POST(request) {
   await connectDB();
@@ -43,9 +37,6 @@ export async function POST(request) {
     email,
     password: hashedPassword,
   });
-
-  const response = await sendMail(email, 'VERIFY', createdUser._id);
-  console.log(response);
 
   return NextResponse.json(
     {
