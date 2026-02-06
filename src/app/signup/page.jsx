@@ -1,10 +1,12 @@
 'use client';
 import { useForm } from 'react-hook-form';
+import { FcGoogle } from 'react-icons/fc';
 
 import axios from 'axios';
 import { useState } from 'react';
 import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 export default function Register() {
   const {
@@ -44,12 +46,13 @@ export default function Register() {
     }
   };
 
+  const handleGoogleOuth = () => {};
+
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
       <div className="w-full max-w-md rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-8">
         <h1 className="text-3xl font-semibold mb-2">Create account</h1>
         <p className="text-sm text-zinc-400 mb-8">Start writing and sharing ideas</p>
-
         <form className="space-y-6" onSubmit={handleSubmit(RegisterUser)}>
           <div className="mb-5">
             <input
@@ -64,7 +67,6 @@ export default function Register() {
               <p className="text-red-400 text-sm mt-1">{errors.username.message}</p>
             )}
           </div>
-
           <div className="mb-5">
             <input
               {...register('email', {
@@ -79,7 +81,6 @@ export default function Register() {
             />
             {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>}
           </div>
-
           <div className="mb-5">
             <input
               {...register('password', {
@@ -99,15 +100,20 @@ export default function Register() {
           <div className="text-[15px] text-red-400">
             {isUserRegister === 'User Already Exits' ? 'user Already exits' : ''}
           </div>
-
           <button
             type="submit"
             className="w-full py-3 rounded-full bg-white text-black font-medium"
           >
-            {isSubmit === 'loading' ? 'loading' : 'signup'}
+            {isSubmit === 'loading' ? 'loading' : 'SignUp'}
           </button>
+          <button
+            onClick={handleGoogleOuth}
+            className="flex items-center gap-3 px-6 py-3 justify-center border border-gray-300 w-full  rounded-full bg-white text-black font-medium"
+          >
+            <FcGoogle className="w-5 h-5" />
+            <span>Continue with Google</span>
+          </button>{' '}
         </form>
-
         <p className="text-sm text-zinc-500 mt-6">
           Already have an account?{' '}
           <button type="submit" className="text-white">
