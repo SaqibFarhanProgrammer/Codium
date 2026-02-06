@@ -15,12 +15,12 @@ export async function POST(request) {
 
     const user = await User.findOne({ email });
 
-    if (!user)
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    if (!user) return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
 
     const compare = await bcrypt.compare(password, user.password);
-    if (!compare)
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    console.log(compare);
+
+    if (!compare) return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
 
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
       expiresIn: '7d',
@@ -36,6 +36,9 @@ export async function POST(request) {
     return response;
   } catch (error) {
     console.error('Login API error:', error);
-    return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error', details: error.message },
+      { status: 500 }
+    );
   }
 }

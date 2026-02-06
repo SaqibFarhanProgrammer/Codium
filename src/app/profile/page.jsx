@@ -1,10 +1,5 @@
-  
 export default function Profile() {
-  const user = {
-    name: 'Saqib',
-    bio: 'Frontend Developer • UI/UX Writer',
-    avatar: 'https://i.pravatar.cc/150?img=12',
-  };
+  const user = {};
 
   const userBlogs = [
     {
@@ -33,14 +28,19 @@ export default function Profile() {
       {/* Profile Header */}
       <div className="flex items-center gap-6 mb-16 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
         <img
-          src={user.avatar}
+          src={
+            user.avatar
+              ? user.avatar
+              : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNHG7RXDNemVraC50-CavzN5eUYCgzYAp9DA&s'
+          }
           alt="Profile"
-          className="rounded-full object-cover"
+          className="rounded-full object-cover h-20 2-20"
         />
 
         <div>
-          <h1 className="text-2xl font-semibold text-zinc-100">{user.name}</h1>
-          <p className="text-zinc-400 text-sm mt-1">{user.bio}</p>
+          <h1 className="text-2xl font-semibold text-zinc-100">
+            {user.name ? user.name : 'no name'}
+          </h1>
           <p className="text-zinc-500 text-sm mt-2">{userBlogs.length} published posts</p>
         </div>
       </div>

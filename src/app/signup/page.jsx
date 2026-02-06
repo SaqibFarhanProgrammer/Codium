@@ -3,33 +3,45 @@ import { useForm } from 'react-hook-form';
 
 import axios from 'axios';
 import { useState } from 'react';
+import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function Register() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
-  const [isSubmit, setisSubmit] = useState("");
+  const [isSubmit, setisSubmit] = useState('');
+  const [isUserRegister, setisUserRegister] = useState('');
 
+  const router = useRouter();
   const RegisterUser = async (data) => {
     const { username, email, password } = data;
+    try {
+      setisSubmit('loading');
+      const response = await axios.post('/api/users/signup', {
+        username: username,
+        email: email,
+        password: password,
+      });
 
-    setisSubmit("loading");
-    const response = await axios.post('/api/users/signup', {
-      username: username,
-      email: email,
-      password: password,
-    });
+      console.log(response);
 
-    if( response.status === 200){
-      setisSubmit("user created")
+      if (response.status === 200) {
+        setisSubmit('user created');
+        router.push('/profile');
+      }
+
+      console.log(response.status);
+
+      setisSubmit('loading false');
+    } catch (error) {
+      console.log('cath error ' + error);
+      setisUserRegister('User Already Exits');
+      setisSubmit('loading false');
     }
-
-
-    setisSubmit("loading false");
   };
 
   return (
@@ -83,6 +95,9 @@ export default function Register() {
             {errors.password && (
               <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>
             )}
+          </div>
+          <div className="text-[15px] text-red-400">
+            {isUserRegister === 'User Already Exits' ? 'user Already exits' : ''}
           </div>
 
           <button
