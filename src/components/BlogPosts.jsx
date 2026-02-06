@@ -4,6 +4,7 @@ import React from "react";
 import { islogin } from "../../appConfig";
 
 const posts = [
+  
   {
     id: 1,
     title: "Mastering React Components",
