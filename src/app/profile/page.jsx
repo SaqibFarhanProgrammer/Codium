@@ -26,6 +26,7 @@ export default function Profile() {
   return (
     <section className="max-w-6xl mx-auto px-6 py-20">
       {/* Profile Header */}
+      <button oncl className="text-2xl bg-red-400 px-10 py-5">logout</button>
       <div className="flex items-center gap-6 mb-16 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
         <img
           src={

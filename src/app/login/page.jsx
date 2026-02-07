@@ -96,8 +96,8 @@ export default function Login() {
 
         <p className="text-sm text-zinc-500 mt-6">
           Don’t have an account?{' '}
-          <Link href="/register" className="text-white">
-            Register
+          <Link href="/signup" className="text-white">
+            Signup
           </Link>
         </p>
       </div>

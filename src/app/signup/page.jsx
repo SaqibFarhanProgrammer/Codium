@@ -1,12 +1,8 @@
 'use client';
 import { useForm } from 'react-hook-form';
-import { FcGoogle } from 'react-icons/fc';
-
 import axios from 'axios';
-import { useState } from 'react';
-import { redirect } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
 
 export default function Register() {
   const {
@@ -15,10 +11,11 @@ export default function Register() {
     formState: { errors },
   } = useForm();
 
+
   const [isSubmit, setisSubmit] = useState('');
   const [isUserRegister, setisUserRegister] = useState('');
-
   const router = useRouter();
+
   const RegisterUser = async (data) => {
     const { username, email, password } = data;
     try {
@@ -45,8 +42,6 @@ export default function Register() {
       setisSubmit('loading false');
     }
   };
-
-  const handleGoogleOuth = () => {};
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
@@ -106,13 +101,6 @@ export default function Register() {
           >
             {isSubmit === 'loading' ? 'loading' : 'SignUp'}
           </button>
-          <button
-            onClick={handleGoogleOuth}
-            className="flex items-center gap-3 px-6 py-3 justify-center border border-gray-300 w-full  rounded-full bg-white text-black font-medium"
-          >
-            <FcGoogle className="w-5 h-5" />
-            <span>Continue with Google</span>
-          </button>{' '}
         </form>
         <p className="text-sm text-zinc-500 mt-6">
           Already have an account?{' '}
