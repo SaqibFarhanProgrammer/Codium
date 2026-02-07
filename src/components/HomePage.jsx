@@ -5,12 +5,9 @@ import { islogin } from '../../appConfig';
 import { redirect } from 'next/navigation';
 
 export default function HomePage() {
-  if (islogin) {
-    redirect('/auth');
-  }
 
   return (
-    <div className="w-full min-h-screen bg-black text-white">
+    <div className="w-full min-h-screen bg-black text-white ">
       {/* Hero Section */}
       <section className="relative w-full h-screen flex items-center">
         <div className="relative max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-12">
