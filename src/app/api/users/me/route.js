@@ -5,8 +5,8 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const cookie = cookies();
-  const token = (await cookie).get('token')?.value;
+  const cookieStore = cookies();
+  const token = (await cookieStore).get('token')?.value;
   if (!token) {
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }
@@ -15,10 +15,7 @@ export async function GET() {
     const user = jwt.verify(token, process.env.JWT_SECRET);
 
     const userData = await User.findById(user.id);
-    return NextResponse.json({
-      authenticated: true,
-      userData,
-    });
+    return NextResponse.json({ authenticated: true, userData }, { status: 200 });
   } catch {
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }

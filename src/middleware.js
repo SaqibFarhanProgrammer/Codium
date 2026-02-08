@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 export async function middleware(request) {
-  const { pathname } = request.nextUrl
+  const { pathname } = request.nextUrl;
 
   try {
     const cookiesStore = await cookies(); // await required

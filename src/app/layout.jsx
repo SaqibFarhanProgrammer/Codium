@@ -2,7 +2,6 @@ import Navbar from '@/components/Navbar';
 import './globals.css';
 import Providers from './Providers';
 import Footer from '@/components/Footer';
-import { AuthProvider } from '@/context/auth.context';
 
 export const metadata = {
   title: 'Create Next App',
@@ -21,9 +20,7 @@ export default function RootLayout({ children }) {
         <div className="bottom flex justify-between w-full  i">
           <div className="left w-['20vw'] "></div>
           <div className="right w-full mt-4 ">
-            <AuthProvider>
               <Providers>{children}</Providers>
-            </AuthProvider>
             <Footer />
           </div>
         </div>
