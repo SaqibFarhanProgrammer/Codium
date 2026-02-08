@@ -6,6 +6,7 @@ const blogPostSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+
   content: {
     type: String,
     required: true,
@@ -28,4 +29,4 @@ const blogPostSchema = new mongoose.Schema({
   },
 });
 
-export const Blog = mongoose.models('Blog') || mongoose.model('Blog', blogPostSchema);
+export const Blog = mongoose.models.Blog || mongoose.model('Blog', blogPostSchema);
