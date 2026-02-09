@@ -15,7 +15,7 @@ export async function middleware(request) {
       return NextResponse.next();
     }
 
-    const protectedRoutes = ['/profile', '/dashboard', '/blogposts'];
+    const protectedRoutes = ['/profile', '/write', '/blogposts'];
     if (protectedRoutes.some((route) => pathname.startsWith(route))) {
       if (!token) {
         return NextResponse.redirect(new URL('/login', request.url));
@@ -30,5 +30,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/login', '/signup', '/profile/:path*', '/dashboard/:path*', '/blogposts/:path*'],
+  matcher: ['/login', '/signup', '/profile/:path*', '/write/:path*', '/blogposts/:path*'],
 };

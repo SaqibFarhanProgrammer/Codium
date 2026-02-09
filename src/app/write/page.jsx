@@ -12,10 +12,6 @@ export default function WriteBlog() {
   const [loadingUploadImage, setloadingUploadImage] = useState(false);
   const [Preview, setPreview] = useState(null);
 
-  async function onSubmit(data) {
-    return data;
-  }
-
   async function handlePublish(data) {
     setloadingUploadImage(true);
     const formData = new FormData();
@@ -27,7 +23,7 @@ export default function WriteBlog() {
     const CloudineryData = await res.data;
     setloadingUploadImage(false);
 
-    console.log(CloudineryData.url);
+    console.log(CloudineryData);
 
     const { title, content } = data;
 
