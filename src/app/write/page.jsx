@@ -1,60 +1,46 @@
 'use client';
 
+import axios from 'axios';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function WriteBlog() {
   const { register, handleSubmit, setValue } = useForm();
-  const [preview, setPreview] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(null);
-
-  // async function handleFileUpload(e) {
-  //   try {
-  //     const { signature, timestamp, api_key, cloud_name } = await axios
-  //       .get('/api/CloudinerySign')
-  //       .then((res) => res.data);
-
-  //     const formData = new FormData();
-  //     formData.append('file', file);
-  //     formData.append('api_key', api_key);
-  //     formData.append('timestamp', timestamp);
-  //     formData.append('signature', signature);
-
-  //     const url = `https://api.cloudinary.com/v1_1/${cloud_name}/auto/upload`;
-
-  //     const res = await fetch(url, {
-  //       method: 'POST',
-  //       body: formData,
-  //     });
-
-  //     const data = await res.json();
-
-  //     setImageUrl(data.secure_url);
-  //     setValue('featuredImage', data.secure_url);
-  //   } catch (err) {
-  //     console.error('Upload failed', err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
-  async function handleFileUpload(e) {
-    const file = e.target.files[0];
-
-    const formData = new FormData();
-    formData.append('file', file);
-    console.log(formData);
-  }
+  const [Image, setImage] = useState(null);
+  const [loadingUploadImage, setloadingUploadImage] = useState(false);
+  const [Preview, setPreview] = useState(null);
 
   async function onSubmit(data) {
     console.log('Form Data:', data);
   }
 
+  const HandleUploadImage = async () => {
+    try {
+      setloadingUploadImage(true);
+      const formData = new FormData();
+      formData.append('file', Image);
+
+      const res = await axios.post('/api/upload', formData);
+      console.log('upload success');
+
+      const data = await res.data;
+      setloadingUploadImage(false);
+
+      console.log(data);
+    } catch (error) {
+      console.log('catch erro fron write blof ' + error);
+    }
+  };
+
+  function CallFnc(data) {
+    onSubmit(data);
+    HandleUploadImage();
+  }
+
   return (
     <div className="min-h-screen bg-neutral-950 py-20 mt-16">
       <div className="max-w-3xl mx-auto px-6">
-        <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
+        <form className="space-y-8" onSubmit={handleSubmit(CallFnc)}>
           <div>
             <input
               type="text"
@@ -85,20 +71,29 @@ export default function WriteBlog() {
           <div className="border-t border-neutral-900" />
 
           <section className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-            <h3 className="text-sm text-zinc-400 mb-4">Featured image</h3>
+            {loadingUploadImage ? (
+              <h3 className="text-sm text-zinc-400 mb-4">Uploading</h3>
+            ) : (
+              <h3 className="text-sm text-zinc-400 mb-4">upload image</h3>
+            )}
 
             <label className="cursor-pointer block">
-              <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  setImage(e.target.files[0], setPreview(URL.createObjectURL(e.target.files[0])));
+                }}
+                className="hidden"
+              />
 
-              <div className="w-full h-64 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center overflow-hidden hover:bg-white/10 transition">
-                {preview ? (
-                  <img src={preview} alt="Featured" className="w-full h-full object-cover" />
-                ) : (
-                  <span className="text-sm text-zinc-500">
-                    {loading ? 'Uploading...' : 'Click to upload cover image'}
-                  </span>
-                )}
-              </div>
+              {Preview ? (
+                <img src={Preview} className="w-full h-[50%]" alt="" />
+              ) : (
+                <div className="w-full h-64 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center overflow-hidden hover:bg-white/10 transition">
+                  <span className="text-sm text-zinc-500"></span>
+                </div>
+              )}
             </label>
           </section>
 

@@ -6,9 +6,5 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-async function uploadC(path) {
-  const result = await cloudinary.uploader.upload(path);
-  return result;
-}
 
-export default uploadC;
+export default cloudinary;
