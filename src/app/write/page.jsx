@@ -1,61 +1,61 @@
 'use client';
 
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function WriteBlog() {
+  const router = useRouter();
   const { register, handleSubmit, setValue } = useForm();
   const [Image, setImage] = useState(null);
   const [loadingUploadImage, setloadingUploadImage] = useState(false);
   const [Preview, setPreview] = useState(null);
 
   async function onSubmit(data) {
-    console.log('Form Data:', data);
+    return data;
   }
 
-  const HandleUploadImage = async () => {
+  async function handlePublish(data) {
+    setloadingUploadImage(true);
+    const formData = new FormData();
+    formData.append('file', Image);
+
+    const res = await axios.post('/api/upload', formData);
+    console.log('upload success');
+
+    const CloudineryData = await res.data;
+    setloadingUploadImage(false);
+
+    console.log(CloudineryData.url);
+
+    const { title, content } = data;
+
     try {
-      setloadingUploadImage(true);
-      const formData = new FormData();
-      formData.append('file', Image);
+      const response = await axios.post('/api/blog/create', {
+        title: title,
+        content: content,
+        image: CloudineryData.url,
+      });
 
-      const res = await axios.post('/api/upload', formData);
-      console.log('upload success');
+      console.log(response);
 
-      const data = await res.data;
-      setloadingUploadImage(false);
-
-      console.log(data);
+      router.push('/profile');
     } catch (error) {
-      console.log('catch erro fron write blof ' + error);
+      console.log('request error ' + error);
     }
-  };
-
-  function CallFnc(data) {
-    onSubmit(data);
-    HandleUploadImage();
   }
 
   return (
     <div className="min-h-screen bg-neutral-950 py-20 mt-16">
       <div className="max-w-3xl mx-auto px-6">
-        <form className="space-y-8" onSubmit={handleSubmit(CallFnc)}>
+        <form className="space-y-8" onSubmit={handleSubmit(handlePublish)}>
           <div>
             <input
               type="text"
               placeholder="Title"
               {...register('title')}
               className="w-full bg-transparent text-4xl font-light text-neutral-100 placeholder:text-neutral-700 outline-none border-none"
-            />
-          </div>
-
-          <div>
-            <input
-              type="text"
-              placeholder="Short description..."
-              {...register('description')}
-              className="w-full bg-transparent text-lg text-neutral-400 placeholder:text-neutral-700 outline-none border-none"
             />
           </div>
 

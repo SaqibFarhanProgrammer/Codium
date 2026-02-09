@@ -26,7 +26,7 @@ export default function Profile() {
   // logout
   async function handleLogout() {
     try {
-      await axios.get('/api/datas/logout');
+      await axios.get('/api/users/logout');
     } finally {
       router.push('/login');
     }
