@@ -10,11 +10,9 @@ export default function Profile() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // fetch profile data
   async function getProfile() {
     try {
-      const res = await axios.get('/api/users/me');
-
+      const res = await axios.get('/api/auth/me');
       setData(res.data.userData);
     } catch (error) {
       router.push('/login');
@@ -23,10 +21,9 @@ export default function Profile() {
     }
   }
 
-  // logout
   async function handleLogout() {
     try {
-      await axios.get('/api/users/logout');
+      await axios.get('/api/auth/logout');
     } finally {
       router.push('/login');
     }
@@ -37,114 +34,77 @@ export default function Profile() {
   }, []);
 
   return (
-   <div className="min-h-screen bg-neutral-950 text-neutral-100 mt-10">
-  <div className="max-w-3xl mx-auto px-6 py-16">
-    {/* Header - Cleaner with better spacing */}
-    <div className="flex justify-between items-center mb-12">
-      <div className="flex items-center gap-4">
-        <img
-          src="https://img.icons8.com/liquid-glass-color/1200/gender-neutral-data.jpg"
-          alt="Profile"
-          className="w-14 h-14 rounded-full object-cover grayscale hover:grayscale-0 transition-all duration-300 ring-2 ring-neutral-800"
-        />
-        <div>
-          <h1 className="text-lg font-medium tracking-tight text-neutral-100">
-            {loading ? <Skeleton className="w-32 h-5" /> : data?.username}
-          </h1>
-          <p className="text-sm text-neutral-500 mt-0.5">Writer & Creator</p>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50 text-slate-900 pt-24">
+      <div className="max-w-5xl mx-auto px-6 py-16">
+        <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between mb-12">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center text-2xl font-semibold text-slate-700">
+              {loading ? '...' : data?.name?.[0] || 'U'}
+            </div>
+            <div>
+              <h1 className="text-3xl font-semibold tracking-tight">
+                {loading ? <Skeleton className="w-40 h-8" /> : data?.name}
+              </h1>
+              <p className="text-sm text-slate-500 mt-2">Your writer dashboard</p>
+            </div>
+          </div>
 
-      <button
-        onClick={handleLogout}
-        className="text-sm text-neutral-500 hover:text-neutral-300 transition-colors px-4 py-2 rounded-lg hover:bg-neutral-900"
-      >
-        Logout
-      </button>
-    </div>
-
-    {/* Stats - Horizontal grid with better visual separation */}
-    <div className="grid grid-cols-3 gap-8 mb-12 p-6 bg-neutral-900/30 rounded-2xl border border-neutral-900">
-      <div className="text-center">
-        <div className="text-3xl font-light text-neutral-100">
-          {loading ? <Skeleton className="w-12 h-8 mx-auto" /> : data?.blogs?.length || 0}
+          <button
+            onClick={handleLogout}
+            className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium hover:bg-slate-100 transition"
+          >
+            Logout
+          </button>
         </div>
-        <div className="text-xs text-neutral-500 uppercase tracking-wider mt-2 font-medium">Posts</div>
-      </div>
-      <div className="text-center border-x border-neutral-800">
-        <div className="text-3xl font-light text-neutral-100">
-          {loading ? <Skeleton className="w-12 h-8 mx-auto" /> : "2.4k"}
-        </div>
-        <div className="text-xs text-neutral-500 uppercase tracking-wider mt-2 font-medium">Views</div>
-      </div>
-      <div className="text-center">
-        <div className="text-3xl font-light text-neutral-100">
-          {loading ? <Skeleton className="w-12 h-8 mx-auto" /> : "128"}
-        </div>
-        <div className="text-xs text-neutral-500 uppercase tracking-wider mt-2 font-medium">Likes</div>
-      </div>
-    </div>
 
-    {/* Articles - Card based layout with better hierarchy */}
-    <div className="mb-20">
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-xs font-semibold text-neutral-400 uppercase tracking-widest">
-          Latest Articles
-        </h2>
-        <span className="text-xs text-neutral-600">{data?.blogs?.length || 0} total</span>
-      </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-sm">
+            <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Posts</p>
+            <p className="mt-4 text-3xl font-semibold">{loading ? <Skeleton className="w-16 h-8" /> : data?.blogs?.length || 0}</p>
+          </div>
+          <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-sm">
+            <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Views</p>
+            <p className="mt-4 text-3xl font-semibold">1.2k</p>
+          </div>
+          <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-sm">
+            <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Likes</p>
+            <p className="mt-4 text-3xl font-semibold">84</p>
+          </div>
+        </div>
 
-      <div className="space-y-4">
-        {!loading &&
-          data?.blogs?.map((blog, index) => (
-            <article
-              key={blog._id}
-              className="group p-6 rounded-xl bg-neutral-900/20 border border-neutral-900 hover:border-neutral-800 hover:bg-neutral-900/40 transition-all duration-300 cursor-pointer"
+        <div className="rounded-3xl bg-white border border-slate-200 shadow-sm p-6">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Your articles</p>
+              <h2 className="text-2xl font-semibold mt-2">Recent drafts and published posts</h2>
+            </div>
+            <button
+              onClick={() => router.push('/write')}
+              className="rounded-full bg-slate-900 px-4 py-2 text-white text-sm font-medium hover:bg-black transition"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-xs text-neutral-600 font-mono">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                    <span className="text-xs text-neutral-500">
-                      {new Date(blog.createdAt).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
-                    </span>
+              Create new post
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            {!loading && data?.blogs?.length === 0 && (
+              <p className="text-slate-500">You have not published any posts yet.</p>
+            )}
+            {!loading &&
+              data?.blogs?.map((blog, index) => (
+                <article key={blog._id} className="rounded-3xl border border-slate-200 p-5 hover:shadow-lg transition">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                      <h3 className="text-xl font-semibold text-slate-900">{blog.title}</h3>
+                      <p className="text-sm text-slate-500 mt-2 line-clamp-2">{blog.description}</p>
+                    </div>
+                    <span className="text-xs uppercase tracking-[0.2em] text-slate-500">{new Date(blog.createdAt).toLocaleDateString()}</span>
                   </div>
-                  <h3 className="text-lg font-medium text-neutral-100 group-hover:text-neutral-50 transition-colors mb-2">
-                    {blog.title}
-                  </h3>
-                  <p className="text-neutral-500 text-sm leading-relaxed line-clamp-2">
-                    {blog.description}
-                  </p>
-                </div>
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                  <svg className="w-5 h-5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-              </div>
-            </article>
-          ))}
+                </article>
+              ))}
+          </div>
+        </div>
       </div>
     </div>
-
-    {/* New Post Button - Better positioned and styled */}
-    <button className="fixed bottom-8 right-8 w-14 h-14 bg-neutral-100 text-neutral-950 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 shadow-2xl shadow-neutral-950/50 group">
-      <svg 
-        className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" 
-        fill="none" 
-        stroke="currentColor" 
-        viewBox="0 0 24 24"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-      </svg>
-    </button>
-  </div>
-</div>
   );
 }

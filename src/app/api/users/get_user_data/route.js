@@ -1,28 +1,23 @@
 import { cookies } from 'next/headers';
-import connectDB from '@/db/connectdb';
-import jwt from 'jsonwebtoken';
-import { User } from '@/models/user.models';
+import { NextResponse } from 'next/server';
+import { adminAuth, adminDb } from '@/lib/firebaseAdmin';
+
 export async function GET() {
-  connectDB();
-
   try {
-    const cookie = cookies();
-    const token = (await cookie).get('token').value || ''; // Assuming you have a function to find token by token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+    const cookieStore = cookies();
+    const token = (await cookieStore).get('token')?.value;
     if (!token) {
       return new Response(JSON.stringify({ error: 'Token not found' }), { status: 401 });
     }
 
-    const user = await User.findById(decoded.id);
+    const decoded = await adminAuth.verifySessionCookie(token, true);
+    const userDoc = await adminDb.collection('users').doc(decoded.uid).get();
 
-    if (!user) {
+    if (!userDoc.exists) {
       return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
     }
 
-    // Find token by token (example)
-
-    return new Response(JSON.stringify({ success: true, data: user }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, data: { uid: decoded.uid, ...userDoc.data() } }), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }

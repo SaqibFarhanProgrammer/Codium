@@ -1,6 +1,6 @@
+import { NextResponse } from 'next/server';
 import { adminAuth } from '@/lib/firebaseAdmin';
 import { signInWithEmailPassword } from '@/lib/firebaseHelpers';
-import { NextResponse } from 'next/server';
 
 const SESSION_COOKIE_NAME = 'token';
 const SESSION_EXPIRES_IN = 7 * 24 * 60 * 60 * 1000;
@@ -9,8 +9,9 @@ export async function POST(request) {
   try {
     const { email, password } = await request.json();
 
-    if (!email || !password)
-      return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
+    if (!email || !password) {
+      return NextResponse.json({ message: 'Email and password are required' }, { status: 400 });
+    }
 
     const authResult = await signInWithEmailPassword(email, password);
     const userRecord = await adminAuth.getUser(authResult.localId);
@@ -22,11 +23,7 @@ export async function POST(request) {
       {
         success: true,
         message: 'User signed in successfully',
-        user: {
-          uid: userRecord.uid,
-          email: userRecord.email,
-          username: userRecord.displayName || '',
-        },
+        user: { uid: userRecord.uid, name: userRecord.displayName || '', email: userRecord.email },
       },
       { status: 200 }
     );
@@ -41,17 +38,10 @@ export async function POST(request) {
 
     return response;
   } catch (error) {
-    console.error('Login API error:', error);
-    const isInvalidCredentials =
-      error.message?.includes('EMAIL_NOT_FOUND') ||
-      error.message?.includes('INVALID_PASSWORD');
-
-    return NextResponse.json(
-      {
-        error: isInvalidCredentials ? 'Invalid credentials' : 'Internal server error',
-        details: error.message,
-      },
-      { status: isInvalidCredentials ? 401 : 500 }
-    );
+    console.error('Auth login error:', error);
+    const message = error.message?.includes('EMAIL_NOT_FOUND') || error.message?.includes('INVALID_PASSWORD')
+      ? 'Invalid credentials'
+      : 'Internal server error';
+    return NextResponse.json({ message, error: error.message }, { status: message === 'Invalid credentials' ? 401 : 500 });
   }
 }

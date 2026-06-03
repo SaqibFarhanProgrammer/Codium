@@ -1,68 +1,61 @@
 'use client';
+
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Register() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
-
-  const [isSubmit, setisSubmit] = useState('');
-  const [isUserRegister, setisUserRegister] = useState('');
+  const [authError, setAuthError] = useState('');
   const router = useRouter();
 
   const RegisterUser = async (data) => {
-    const { username, email, password } = data;
     try {
-      setisSubmit('loading');
-      const response = await axios.post('/api/users/signup', {
-        username: username,
-        email: email,
-        password: password,
+      setAuthError('');
+      const { name, email, password } = data;
+      const response = await axios.post('/api/auth/register', {
+        name,
+        email,
+        password,
       });
 
-      console.log(response);
-
-      if (response.status === 200) {
-        setisSubmit('user created');
+      if (response.status === 201) {
         router.push('/profile');
       }
-
-      console.log(response.status);
-
-      setisSubmit('loading false');
     } catch (error) {
-      console.log('cath error ' + error);
-      setisUserRegister('User Already Exits');
-      setisSubmit('loading false');
+      setAuthError(
+        error.response?.data?.message === 'User already exists with this email'
+          ? 'An account already exists for this email.'
+          : 'Unable to create account. Please try again.'
+      );
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6">
-      <div className="w-full max-w-md rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-8">
-        <h1 className="text-3xl font-semibold mb-2">Create account</h1>
-        <p className="text-sm text-zinc-400 mb-8">Start writing and sharing ideas</p>
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-6 py-10">
+      <div className="w-full max-w-md rounded-3xl bg-white shadow-xl border border-slate-200 p-10">
+        <h1 className="text-3xl font-semibold text-slate-900 mb-3">Create account</h1>
+        <p className="text-sm text-slate-500 mb-8">Start writing and sharing ideas.</p>
+
         <form className="space-y-6" onSubmit={handleSubmit(RegisterUser)}>
-          <div className="mb-5">
+          <div>
             <input
-              {...register('username', { required: 'Username is required' })}
+              {...register('name', { required: 'Name is required' })}
               type="text"
-              placeholder="Username"
-              className={`w-full bg-transparent border-b py-3 outline-none placeholder:text-zinc-500 ${
-                errors.username ? 'border-red-400' : 'border-white/20'
-              }`}
+              placeholder="Name"
+              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-black outline-none"
             />
-            {errors.username && (
-              <p className="text-red-400 text-sm mt-1">{errors.username.message}</p>
-            )}
+            {errors.name && <p className="text-red-500 text-sm mt-2">{errors.name.message}</p>}
           </div>
-          <div className="mb-5">
+
+          <div>
             <input
               {...register('email', {
                 required: 'Email is required',
@@ -70,13 +63,12 @@ export default function Register() {
               })}
               type="email"
               placeholder="Email"
-              className={`w-full bg-transparent border-b py-3 outline-none placeholder:text-zinc-500 ${
-                errors.email ? 'border-red-400' : 'border-white/20'
-              }`}
+              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-black outline-none"
             />
-            {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>}
+            {errors.email && <p className="text-red-500 text-sm mt-2">{errors.email.message}</p>}
           </div>
-          <div className="mb-5">
+
+          <div>
             <input
               {...register('password', {
                 required: 'Password is required',
@@ -84,29 +76,27 @@ export default function Register() {
               })}
               type="password"
               placeholder="Password"
-              className={`w-full bg-transparent border-b py-3 outline-none placeholder:text-zinc-500 ${
-                errors.password ? 'border-red-400' : 'border-white/20'
-              }`}
+              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-black outline-none"
             />
-            {errors.password && (
-              <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>
-            )}
+            {errors.password && <p className="text-red-500 text-sm mt-2">{errors.password.message}</p>}
           </div>
-          <div className="text-[15px] text-red-400">
-            {isUserRegister === 'User Already Exits' ? 'user Already exits' : ''}
-          </div>
+
+          {authError && <p className="text-red-500 text-sm">{authError}</p>}
+
           <button
             type="submit"
-            className="w-full py-3 rounded-full bg-white text-black font-medium"
+            disabled={isSubmitting}
+            className="w-full rounded-2xl bg-slate-900 px-4 py-3 text-white font-medium hover:bg-black transition disabled:opacity-60"
           >
-            {isSubmit === 'loading' ? 'loading' : 'SignUp'}
+            {isSubmitting ? 'Creating account...' : 'Sign Up'}
           </button>
         </form>
-        <p className="text-sm text-zinc-500 mt-6">
+
+        <p className="text-sm text-slate-500 mt-6">
           Already have an account?{' '}
-          <button type="submit" className="text-white">
+          <Link href="/login" className="text-slate-900 font-semibold">
             Login
-          </button>
+          </Link>
         </p>
       </div>
     </div>

@@ -11,19 +11,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body cz-shortcut-listen="true" className={` flex flex-col bg-black text-white antialiased`}>
-        <div className="top">
-          <Providers>
-            <Navbar />
-          </Providers>
-        </div>
-        <div className="bottom flex justify-between w-full  i">
-          <div className="left w-['20vw'] "></div>
-          <div className="right w-full mt-4 ">
-              <Providers>{children}</Providers>
-            <Footer />
-          </div>
-        </div>
+      <body className="flex min-h-screen flex-col bg-background text-foreground antialiased">
+        <Providers>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

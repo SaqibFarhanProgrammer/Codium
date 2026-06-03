@@ -1,29 +1,22 @@
+import { NextResponse } from 'next/server';
 import { adminAuth, adminDb, adminFieldValue } from '@/lib/firebaseAdmin';
 import { signInWithEmailPassword } from '@/lib/firebaseHelpers';
-import { NextResponse } from 'next/server';
 
 const SESSION_COOKIE_NAME = 'token';
 const SESSION_EXPIRES_IN = 7 * 24 * 60 * 60 * 1000;
 
 export async function POST(request) {
-  const { username, email, password } = await request.json();
-
-  if (!username || !email || !password) {
-    return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
-  }
-
-  if (password.length < 6) {
-    return NextResponse.json(
-      { message: 'Password must be at least 6 characters' },
-      { status: 400 }
-    );
-  }
-
-  if (!email.includes('@')) {
-    return NextResponse.json({ message: 'Invalid email format' }, { status: 400 });
-  }
-
   try {
+    const { name, email, password } = await request.json();
+
+    if (!name || !email || !password) {
+      return NextResponse.json({ message: 'Name, email, and password are required' }, { status: 400 });
+    }
+
+    if (password.length < 6) {
+      return NextResponse.json({ message: 'Password must be at least 6 characters' }, { status: 400 });
+    }
+
     try {
       await adminAuth.getUserByEmail(email);
       return NextResponse.json({ message: 'User already exists with this email' }, { status: 400 });
@@ -36,12 +29,11 @@ export async function POST(request) {
     const userRecord = await adminAuth.createUser({
       email,
       password,
-      displayName: username,
-      photoURL: null,
+      displayName: name,
     });
 
     await adminDb.collection('users').doc(userRecord.uid).set({
-      username,
+      name,
       email,
       image: null,
       isVerified: false,
@@ -55,10 +47,11 @@ export async function POST(request) {
 
     const response = NextResponse.json(
       {
+        success: true,
         message: 'User created successfully',
-        user: { uid: userRecord.uid, email, username },
+        user: { uid: userRecord.uid, name, email },
       },
-      { status: 200 }
+      { status: 201 }
     );
 
     response.cookies.set(SESSION_COOKIE_NAME, sessionCookie, {
@@ -71,10 +64,7 @@ export async function POST(request) {
 
     return response;
   } catch (error) {
-    console.error('Signup API error:', error);
-    return NextResponse.json(
-      { message: 'Internal server error', details: error.message },
-      { status: 500 }
-    );
+    console.error('Auth register error:', error);
+    return NextResponse.json({ message: 'Internal server error', error: error.message }, { status: 500 });
   }
 }

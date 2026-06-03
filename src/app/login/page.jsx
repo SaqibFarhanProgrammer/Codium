@@ -5,9 +5,10 @@ import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+
 export default function Login() {
   const router = useRouter();
-  const [ErrorsLogin, setErrorsLogin] = useState('');
+  const [authError, setAuthError] = useState('');
   const {
     register,
     handleSubmit,
@@ -16,36 +17,27 @@ export default function Login() {
 
   async function LoginUser(data) {
     try {
+      setAuthError('');
       const { email, password } = data;
+      const response = await axios.post('/api/auth/login', { email, password });
 
-      const response = await axios.post('/api/users/login', {
-        email: email,
-        password: password,
-      });
-
-      console.log(response);
       if (response.status === 200) {
         router.push('/profile');
       }
-
-      console.log(ErrorsLogin);
     } catch (error) {
-      if (error.response) {
-        console.log(error.response);
-
-        if (error.response.status === 401) {
-          console.log(error.response.status);
-          setErrorsLogin('Invelid cridintials');
-        }
-      }
+      setAuthError(
+        error.response?.data?.message === 'Invalid credentials'
+          ? 'Invalid email or password'
+          : 'Unable to sign in. Please try again.'
+      );
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6">
-      <div className="w-full max-w-md rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-8">
-        <h1 className="text-3xl font-semibold mb-2">Welcome back</h1>
-        <p className="text-sm text-zinc-400 mb-8">Sign in to continue writing</p>
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-6 py-10">
+      <div className="w-full max-w-md rounded-3xl bg-white shadow-xl border border-slate-200 p-10">
+        <h1 className="text-3xl font-semibold text-slate-900 mb-3">Welcome back</h1>
+        <p className="text-sm text-slate-500 mb-8">Sign in with your email to manage your posts.</p>
 
         <form onSubmit={handleSubmit(LoginUser)} className="space-y-6">
           <div>
@@ -54,14 +46,11 @@ export default function Login() {
               placeholder="Email"
               {...register('email', {
                 required: 'Email is required',
-                pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: 'Invalid email address',
-                },
+                pattern: { value: /^\S+@\S+$/i, message: 'Invalid email address' },
               })}
-              className="w-full bg-transparent border-b border-white/20 py-3 outline-none placeholder:text-zinc-500"
+              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-black"
             />
-            {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>}
+            {errors.email && <p className="text-red-500 text-sm mt-2">{errors.email.message}</p>}
           </div>
 
           <div>
@@ -70,33 +59,26 @@ export default function Login() {
               placeholder="Password"
               {...register('password', {
                 required: 'Password is required',
-                minLength: {
-                  value: 6,
-                  message: 'Password must be at least 6 characters',
-                },
+                minLength: { value: 6, message: 'Minimum 6 characters' },
               })}
-              className="w-full bg-transparent border-b border-white/20 py-3 outline-none placeholder:text-zinc-500"
+              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-black"
             />
-            {errors.password && (
-              <p className="text-red-400 text-xs mt-1">{errors.password.message}</p>
-            )}
+            {errors.password && <p className="text-red-500 text-sm mt-2">{errors.password.message}</p>}
           </div>
 
-          <div className="text-[15px] text-red-500">
-            {ErrorsLogin === 'Invelid cridintials' ? 'Invelid credentials' : null}
-          </div>
+          {authError && <p className="text-red-500 text-sm">{authError}</p>}
 
           <button
             disabled={isSubmitting}
-            className="w-full py-3 rounded-full bg-white text-black font-medium disabled:opacity-60"
+            className="w-full rounded-2xl bg-slate-900 px-4 py-3 text-white font-medium hover:bg-black transition disabled:opacity-60"
           >
             {isSubmitting ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
-        <p className="text-sm text-zinc-500 mt-6">
+        <p className="text-sm text-slate-500 mt-6">
           Don’t have an account?{' '}
-          <Link href="/signup" className="text-white">
+          <Link href="/signup" className="text-slate-900 font-semibold">
             Signup
           </Link>
         </p>
